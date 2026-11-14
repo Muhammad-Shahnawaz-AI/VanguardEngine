@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   build-windows:
-    name: Windows x64 (MSVC)
+    name: Windows x64 (MSVC + Installer)
     runs-on: windows-latest
 
     steps:
@@ -32,7 +32,7 @@ jobs:
       - name: Run Unit & Determinism Tests
         run: ctest --test-dir build -C Release --output-on-failure
 
-      - name: Package Release Zip
+      - name: Stage Game Files & Portable Zip
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path dist/VanguardEngine
@@ -40,15 +40,31 @@ jobs:
           Copy-Item -Recurse assets -Destination dist/VanguardEngine/
           Compress-Archive -Path dist/VanguardEngine/* -DestinationPath VanguardEngine-Windows-x64.zip
 
-      - name: Upload Build Artifact
+      - name: Build Windows Setup Installer (.exe)
+        shell: pwsh
+        run: |
+          if (!(Get-Command iscc -ErrorAction SilentlyContinue)) {
+            choco install innosetup -y --no-progress
+          }
+          $iscc = (Get-Command iscc -ErrorAction SilentlyContinue).Source
+          if (-not $iscc) {
+            $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          }
+          & "$iscc" /Q installer.iss
+
+      - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: VanguardEngine-Windows-x64
-          path: VanguardEngine-Windows-x64.zip
+          name: VanguardEngine-Windows-Release
+          path: |
+            VanguardEngine-Setup-x64.exe
+            VanguardEngine-Windows-x64.zip
 
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: VanguardEngine-Windows-x64.zip
+          files: |
+            VanguardEngine-Setup-x64.exe
+            VanguardEngine-Windows-x64.zip
           generate_release_notes: true
