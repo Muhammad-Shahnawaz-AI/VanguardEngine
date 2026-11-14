@@ -1,0 +1,114 @@
+{
+  "weapon": "Vanguard Twinblade",
+  "moves": [
+    {
+      "name": "LightSlash_1",
+      "starter_input": "Light",
+      "startup": 5,
+      "active": 4,
+      "recovery": 11,
+      "cancel_start": 1,
+      "damage": 18.0,
+      "posture_damage": 14.0,
+      "knockback": 5.5,
+      "lunge": 6.0,
+      "hitbox_offset": [1.05, 0.0],
+      "hitbox_extents": [0.95, 0.75],
+      "hitstop": 3,
+      "hyper_armor": false,
+      "links": [
+        { "input": "Light", "target": "LightSlash_2" },
+        { "input": "Heavy", "target": "HeavyUppercut" },
+        { "input": "Special", "target": "ArcBladeWave" }
+      ]
+    },
+    {
+      "name": "LightSlash_2",
+      "startup": 4,
+      "active": 4,
+      "recovery": 12,
+      "cancel_start": 1,
+      "damage": 22.0,
+      "posture_damage": 18.0,
+      "knockback": 6.5,
+      "lunge": 7.0,
+      "hitbox_offset": [1.15, 0.0],
+      "hitbox_extents": [1.05, 0.85],
+      "hitstop": 4,
+      "hyper_armor": false,
+      "links": [
+        { "input": "Light", "target": "LightFinisher_3" },
+        { "input": "Heavy", "target": "HeavyCleave" }
+      ]
+    },
+    {
+      "name": "LightFinisher_3",
+      "startup": 7,
+      "active": 5,
+      "recovery": 15,
+      "cancel_start": 4,
+      "damage": 36.0,
+      "posture_damage": 30.0,
+      "knockback": 12.0,
+      "lunge": 9.5,
+      "hitbox_offset": [1.35, 0.0],
+      "hitbox_extents": [1.30, 1.10],
+      "hitstop": 6,
+      "hyper_armor": true,
+      "links": []
+    },
+    {
+      "name": "HeavyCleave",
+      "starter_input": "Heavy",
+      "startup": 10,
+      "active": 6,
+      "recovery": 16,
+      "cancel_start": 4,
+      "damage": 44.0,
+      "posture_damage": 42.0,
+      "knockback": 14.0,
+      "lunge": 8.0,
+      "hitbox_offset": [1.45, 0.0],
+      "hitbox_extents": [1.40, 1.25],
+      "hitstop": 7,
+      "hyper_armor": true,
+      "links": []
+    },
+    {
+      "name": "HeavyUppercut",
+      "startup": 9,
+      "active": 5,
+      "recovery": 14,
+      "cancel_start": 3,
+      "damage": 34.0,
+      "posture_damage": 35.0,
+      "knockback": 11.0,
+      "lunge": 6.5,
+      "hitbox_offset": [1.20, 0.0],
+      "hitbox_extents": [1.10, 0.95],
+      "hitstop": 5,
+      "hyper_armor": true,
+      "links": [
+        { "input": "Special", "target": "ArcBladeWave" }
+      ]
+    },
+    {
+      "name": "ArcBladeWave",
+      "starter_input": "Special",
+      "startup": 8,
+      "active": 4,
+      "recovery": 14,
+      "cancel_start": 3,
+      "damage": 28.0,
+      "posture_damage": 20.0,
+      "knockback": 8.0,
+      "lunge": -2.0,
+      "hitbox_offset": [1.00, 0.0],
+      "hitbox_extents": [0.85, 0.85],
+      "hitstop": 4,
+      "hyper_armor": false,
+      "spawns_projectile": true,
+      "links": []
+    }
+  ]
+}

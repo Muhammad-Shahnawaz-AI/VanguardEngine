@@ -1,0 +1,54 @@
+name: Build & Release Windows Executable
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    name: Windows x64 (MSVC)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure CMake
+        run: >
+          cmake -B build
+          -DCMAKE_BUILD_TYPE=Release
+          -DVANGUARD_BUILD_TESTS=ON
+          -DSDL_SHARED=OFF
+          -DSDL_STATIC=ON
+
+      - name: Build VanguardGame.exe & Tests
+        run: cmake --build build --config Release --parallel
+
+      - name: Run Unit & Determinism Tests
+        run: ctest --test-dir build -C Release --output-on-failure
+
+      - name: Package Release Zip
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist/VanguardEngine
+          Copy-Item build/Release/VanguardGame.exe -Destination dist/VanguardEngine/
+          Copy-Item -Recurse assets -Destination dist/VanguardEngine/
+          Compress-Archive -Path dist/VanguardEngine/* -DestinationPath VanguardEngine-Windows-x64.zip
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: VanguardEngine-Windows-x64
+          path: VanguardEngine-Windows-x64.zip
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: VanguardEngine-Windows-x64.zip
+          generate_release_notes: true
