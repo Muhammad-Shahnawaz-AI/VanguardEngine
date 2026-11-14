@@ -113,7 +113,7 @@ if(VANGUARD_BUILD_TESTS)
     add_executable(VanguardTests tests/VanguardTests.cpp)
     target_link_libraries(VanguardTests PRIVATE VanguardCombatLib GTest::gtest_main)
     include(GoogleTest)
-    gtest_discover_tests(VanguardTests)
+    gtest_discover_tests(VanguardTests WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
 set(VANGUARD_TARGETS VanguardCore VanguardCombatLib VanguardGame)
