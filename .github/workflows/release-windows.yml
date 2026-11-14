@@ -18,16 +18,26 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install Python Dependencies (jinja2 for GLAD)
+      - name: Set Up Python & Install jinja2 for GLAD
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python Dependencies
         run: python -m pip install --upgrade pip jinja2
 
       - name: Configure CMake
-        run: >
-          cmake -B build
-          -DCMAKE_BUILD_TYPE=Release
-          -DVANGUARD_BUILD_TESTS=ON
-          -DSDL_SHARED=OFF
-          -DSDL_STATIC=ON
+        shell: pwsh
+        run: |
+          $py = (Get-Command python).Source
+          cmake -B build `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DVANGUARD_BUILD_TESTS=ON `
+            -DSDL_SHARED=OFF `
+            -DSDL_STATIC=ON `
+            "-DPython_EXECUTABLE=$py" `
+            "-DPython3_EXECUTABLE=$py" `
+            "-DPYTHON_EXECUTABLE=$py"
 
       - name: Build VanguardGame.exe & Tests
         run: cmake --build build --config Release --parallel
